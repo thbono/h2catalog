@@ -1,2 +1,2 @@
 # h2catalog
-H2 database with catalog support
+H2 Database with catalog support
