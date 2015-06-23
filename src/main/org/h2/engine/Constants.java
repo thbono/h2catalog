@@ -36,7 +36,7 @@ public class Constants {
     /**
      * Whether this is a snapshot version.
      */
-    public static final boolean BUILD_SNAPSHOT = false;
+    public static final boolean BUILD_SNAPSHOT = true;
 
     /**
      * If H2 is compiled to be included in a product, this should be set to
@@ -44,7 +44,7 @@ public class Constants {
      * Additionally, a version number should be set to distinguish releases.
      * Example: ACME_SVN1651_BUILD3
      */
-    public static final String BUILD_VENDOR_AND_VERSION = null;
+    public static final String BUILD_VENDOR_AND_VERSION = "catalog";
 
     /**
      * The TCP protocol version number 6.

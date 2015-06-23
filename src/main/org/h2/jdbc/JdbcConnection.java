@@ -5,48 +5,26 @@
  */
 package org.h2.jdbc;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.NClob;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLClientInfoException;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.SQLXML;
-import java.sql.Savepoint;
-import java.sql.Statement;
-import java.sql.Struct;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Properties;
-
 import org.h2.api.ErrorCode;
 import org.h2.command.CommandInterface;
-import org.h2.engine.ConnectionInfo;
-import org.h2.engine.Constants;
-import org.h2.engine.SessionInterface;
-import org.h2.engine.SessionRemote;
-import org.h2.engine.SysProperties;
+import org.h2.engine.*;
 import org.h2.message.DbException;
 import org.h2.message.TraceObject;
 import org.h2.result.ResultInterface;
 import org.h2.util.CloseWatcher;
 import org.h2.util.JdbcUtils;
 import org.h2.util.Utils;
-import org.h2.value.CompareMode;
-import org.h2.value.Value;
-import org.h2.value.ValueInt;
-import org.h2.value.ValueNull;
-import org.h2.value.ValueString;
+import org.h2.value.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Properties;
+import java.util.regex.Pattern;
 
 /*## Java 1.7 ##
 import java.util.concurrent.Executor;
@@ -65,6 +43,8 @@ import java.util.concurrent.Executor;
 public class JdbcConnection extends TraceObject implements Connection {
 
     private static boolean keepOpenStackTrace;
+
+    private static final Pattern FULL_QUALIFIED_PATTERN = Pattern.compile("\\w+\\.(\\w+\\.\\w+)");
 
     private final String url;
     private final String user;
@@ -1186,6 +1166,7 @@ public class JdbcConnection extends TraceObject implements Connection {
      * @return the command
      */
     CommandInterface prepareCommand(String sql, int fetchSize) {
+        sql = FULL_QUALIFIED_PATTERN.matcher(sql).replaceAll("$1");
         return session.prepareCommand(sql, fetchSize);
     }
 
